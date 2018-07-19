@@ -39,12 +39,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1> {this.state.activeRoom.newRoomName || "Select Chat Room"}</h1>
+        <h1> {"Select Chat Room"}</h1>
         <RoomList firebase={firebase} setActiveRoom={this.setActiveRoom} />
-
-        {this.state.activeRoom ?
-          (<MessageList firebase={firebase} setActiveRoom={this.setActiveRoom} />) : (null)
-        }
+        <MessageList firebase={firebase} setActiveRoom={this.setActiveRoom} activeRoom={this.state.activeRoom}/>
 
       </div>
     );
