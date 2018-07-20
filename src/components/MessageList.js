@@ -6,6 +6,7 @@ class MessageList extends Component {
 
     this.state = {
       messages: [],
+      username:'',
       content: '',
       sentAt: '',
       roomId: ''
@@ -30,26 +31,31 @@ class MessageList extends Component {
     this.setState({
       content: e.target.value,
       sentAt: this.props.firebase.database.ServerValue.TIMESTAMP,
-      roomId: this.props.setActiveRoom
+      roomId: this.props.activeRoom.key,
+      username: this.props.currentUser
     });
   }
 
   createMessage(e) {
     e.preventDefault();
     this.messagesRef.push({
+      username: this.props.currentUser,
       content: this.state.content,
       sentAt: this.state.sentAt,
       roomId: this.state.roomId
     });
-    this.setState({content: '', sentAt: '', roomId: ''});
-  }
+    this.setState({message: '', sentAt: '', roomId: ''})
+    e.target.reset()
+  };
 
   render() {
     return (
-      <div>
+      <div className = "currentMessages">
         <ul>
+
             {this.state.messages.map ((message) => {
-              if (message.roomId === this.props.activeRoom.key) {
+              let activeRoom = this.props.activeRoom.key
+              if (message.roomId === activeRoom) {
                 return <li key={message.key}>{message.content}</li>
               }
               null;
@@ -57,8 +63,8 @@ class MessageList extends Component {
           }
         </ul>
 
-        <form onSubmit={this.createMessage}>
-          <input type="text" value={this.state.content} onChange={this.handleChange} />
+        <form className="newMessage" onSubmit={ (e) => this.createMessage(e)}>
+          <input type="text" placeholder="Type message here" onChange={(e)=>this.handleChange(e)} />
           <input type="submit" value="Submit" />
         </form>
       </div>

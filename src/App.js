@@ -31,7 +31,6 @@ class App extends Component {
 
   setActiveRoom(room) {
     this.setState({activeRoom: room});
-
     if (this.state.activeRoom === room) {
       console.log("active room");
     } else {
