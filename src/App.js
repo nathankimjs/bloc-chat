@@ -3,6 +3,7 @@ import './App.css';
 import * as firebase from 'firebase';
 import RoomList from './components/RoomList';
 import MessageList from './components/MessageList';
+import User from './components/User';
 
 // Initialize Firebase
   var config = {
@@ -22,28 +23,46 @@ class App extends Component {
 
       this.state = {
         activeRoom: '',
+        user: null
       };
       this.setActiveRoom = this.setActiveRoom.bind(this);
+      this.setUser = this.setUser.bind(this);
   }
 
   setActiveRoom(room) {
     this.setState({activeRoom: room});
+
     if (this.state.activeRoom === room) {
-      console.log("current room");
+      console.log("active room");
     } else {
       console.log(room);
     }
+  }
 
+  setUser(user) {
+    this.setState({ user: user});
   }
 
   render() {
+    let currentUser = this.state.user === null ? "Guest" : this.state.user.displayName;
+
     return (
       <div className="App">
         <h1> {"Select Chat Room"}</h1>
-        <RoomList firebase={firebase} setActiveRoom={this.setActiveRoom} />
-        <MessageList firebase={firebase} setActiveRoom={this.setActiveRoom} activeRoom={this.state.activeRoom}/>
-
+        <User
+          firebase={firebase}
+          setUser={this.setUser}
+          currentUser = {currentUser} />
+        <RoomList
+          firebase={firebase}
+          setActiveRoom={this.setActiveRoom} />
+        <MessageList
+          firebase={firebase}
+          setActiveRoom={this.setActiveRoom}
+          activeRoom={this.state.activeRoom}
+          currentUser = {currentUser} />
       </div>
+
     );
   }
 }
